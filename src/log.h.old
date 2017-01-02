@@ -1,0 +1,53 @@
+/*************************************************************************
+	> File Name: log.h
+	> Author: 
+	> Mail: 
+	> Created Time: 2016年12月08日 星期四 16时22分08秒
+ ************************************************************************/
+
+#ifndef __LOG_H__
+#define __LOG_H__
+
+#include <time.h>
+
+#define LOG_PATH_LEN			128
+#define LOG_BUF_LEN				128
+#define LOG_NAME_LEN			128
+#define LOG_SIZE				(1024)	// 1K byte
+#define LOG_CONF_CHECK			({\
+	int ret = 0; \
+	if (access("conf/log.conf", F_OK)) \
+	{ \
+		perror("conf/log.conf"); \
+		ret = -1; \
+	} \
+	ret;})
+
+#define LOG(level, format, args...) ({ \
+	if (level <= LEVEL_MAX) \
+	{ \
+		log_check(); \
+		time_t ti; \
+		struct tm *tm; \
+		time(&ti); \
+		tm = localtime(&ti); \
+		fprintf(g_log_file, "%4d-%02d-%02d %02d:%02d:%02d \n", tm->tm_year+1900, tm->tm_mon, tm->tm_mday, \
+			tm->tm_hour, tm->tm_min, tm->tm_sec); \
+	} \
+	})
+
+enum {
+	LEVEL_ERROR = 0,		//do not use log
+	LEVEL_DEBUG,			//use debug
+	LEVEL_MAX,
+};
+
+extern FILE *g_log_file;
+
+int log_init(void);
+int get_log_level(unsigned int * level);
+int get_log_path(char *path, unsigned int len);
+int log_check(void);
+
+#endif
+
