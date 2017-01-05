@@ -1,0 +1,12 @@
+FILE_DIR = $(shell cd .. && pwd)
+OBJS_DIR = $(shell pwd)/obj
+$(shell mkdir -p $(OBJS_DIR))
+
+PROGRAM = test
+CC = gcc
+CFLAGS = -g -c
+INCLUDES_DIR = -I./include \
+                -I./include/3tcloud/
+CFLAGS += $(INCLUDES_DIR)
+
+export
