@@ -9,4 +9,4 @@ build :
 .PHONY : clean
 
 clean :
-	rm -rf $(OBJS_DIR)
+	rm -rf $(OBJS_DIR) $(PROGRAM)

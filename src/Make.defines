@@ -4,9 +4,9 @@ $(shell mkdir -p $(OBJS_DIR))
 
 PROGRAM = test
 CC = gcc
-CFLAGS = -g -c
-INCLUDES_DIR = -I./include \
-                -I./include/3tcloud/
-CFLAGS += $(INCLUDES_DIR)
+COMPILE = $(CC) -g -c -o
+INCLUDES_DIR = -I$(FILE_DIR)/include \
+                -I$(FILE_DIR)/include/3tcloud/
+CFLAGS := $(INCLUDES_DIR)
 
 export

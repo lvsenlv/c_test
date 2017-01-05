@@ -172,6 +172,6 @@ int log_check(void)
 
 static void before_main(void)
 {
-    fprintf(stderr, "before_main \n");
+    (void) 0;
 }
 
