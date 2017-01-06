@@ -1,12 +1,18 @@
-FILE_DIR = $(shell cd .. && pwd)
-OBJS_DIR = $(shell pwd)/obj
-$(shell mkdir -p $(OBJS_DIR))
+#define some variables
 
 PROGRAM = test
-CC = gcc
-COMPILE = $(CC) -g -c -o
-INCLUDES_DIR = -I$(FILE_DIR)/include \
-                -I$(FILE_DIR)/include/3tcloud/
+ROOT_DIR = $(shell cd ../ && pwd)
+INCLUDES_DIR = $(shell find $(ROOT_DIR)/include/ -maxdepth 2 -type d | sed 's/^/-I&/g')
+OBJS_DIR = $(shell pwd)/object
+CC := gcc
+CC_OPT := -c -o
 CFLAGS := $(INCLUDES_DIR)
+LIBS :=
+$(shell mkdir -p $(OBJS_DIR))
+
+#modify the variables
+
+CFLAGS += -g -Wall -Wno-strict-aliasing -O3
 
 export
+
