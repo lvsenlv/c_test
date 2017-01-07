@@ -15,10 +15,10 @@
 int main()
 {
     test_time();
-    int array[3][4] = {
-        0,1,2,3,
-        4,15,6,17,
-        80,9,10,11
+    int array[3][4]={
+        {0,1,2,3},
+        {4,15,6,17},
+        {80,9,10,11}
     };
     int *ptr = &array[0][0];
     int i = 0, max_num = *ptr;
@@ -47,12 +47,12 @@ int main()
     fprintf(stdout, "the max_num=%d is in %d row %d col \n", max_num, \
             location/D2_ARRAY_COL(array)+1, location%D2_ARRAY_COL(array)+1);
 
-    /*
+    
     log_init();
     LOG(LOG_LEVEL_ERROR, "test1 \n");
     LOG(LOG_LEVEL_ERROR, "test2 \n");
     LOG(LOG_LEVEL_ERROR, "test3 \n");
-    */
+    
     
     return 0;
 }

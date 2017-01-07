@@ -68,7 +68,8 @@ int test_file(void)
 		return -1;
 	}
 	pclose( fp );
-	
+
+    return 0;
 }
 
 int test_struct_array(void)
@@ -84,5 +85,7 @@ int test_struct_array(void)
 		printf( "file %d is in %s, it's size %d * %d \n", file[i].numb, \
 			file[i].fp, file[i].weight, file[i].hight );
 	}
+
+    return 0;
 }
 

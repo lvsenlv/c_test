@@ -5,8 +5,6 @@ cur_dir := $(notdir $(shell pwd))
 #or use the built-in functions: subst
 $(cur_dir)_sub_dir := $(subst ./, ,$(shell find . -maxdepth 1 -type d | sed '1d'))
 
-#$(cur_dir)_srcs := $(shell ls *.c)
-#or use the built-in functions: wildcard
 $(cur_dir)_srcs := $(wildcard *.c)
 
 $(cur_dir)_objs := $(patsubst %.c, $(OBJS_DIR)/%.o, $($(cur_dir)_srcs))
@@ -21,4 +19,8 @@ all : $($(cur_dir)_objs)
 
 $(OBJS_DIR)/%.o : %.c
 	$(CC) $(CC_OPT) $@ $< $(CFLAGS)
+
+.PHONY : clean
+
+clean :
 
