@@ -4,13 +4,13 @@
 	> Mail: 
 	> Created Time: 2016年12月06日 星期二 13时46分24秒
  ************************************************************************/
-#include "3tcloud_test.h"
 #include <stdio.h>
 //#include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <time.h>
+#include "3t_test.h"
 
 char FileName[16] = {"clone"};
 char FilePath[64] = {"/root/test/clone"};

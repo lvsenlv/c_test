@@ -6,7 +6,7 @@
  ************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
-#include "3tcloud_test.h"
+#include "3t_test.h"
 #include "log.h"
 
 #define D2_ARRAY_LEN(array_name) (sizeof(array_name)/sizeof(**array_name))
