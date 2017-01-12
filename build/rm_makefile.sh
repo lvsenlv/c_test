@@ -11,6 +11,6 @@ cd ../src/
 
 for dir in $SRCS_PATH;
 do
-    cp Makefile $dir
+    rm -rf $dir/Makefile
 done
 
