@@ -31,7 +31,7 @@ int main(void)
 	char *argv[6] = {
 		"test",
 		"10",
-		"2",
+		"16",
 		"10",
 		"123",
 		"158"
@@ -165,7 +165,32 @@ int convert_system(link_list_t *pnode)
 	return 0;
 }
 
-int strrev(link_list_t *pnode)
+int reverse_link_node_(link_list_t *pnode)
 {
+	link_list_t *link_node = pnode->next;
+	char *head_ptr = NULL, *tail_ptr = NULL, *temp = NULL;
+	int i = 0, size = 0;
+	while(link_node)
+	{
+		size = link_node->res_cur_size / 2;
+		head_ptr = link_node->res;
+		tail_ptr = link_node->res + link_node->res_cur_size;
+		if(head_ptr && tail_ptr)
+		{
+			for(i = 0; i < size; i++)
+			{
+				*temp = *head_ptr;
+				*head_ptr++ = *tail_ptr;
+				*tail_ptr-- = *temp;
+			}
+			link_node = link_node->next;
+		}
+		else
+		{
+			link_node = link_node->next;
+			continue;
+		}
+	}
+	
 	return 0;
 }
