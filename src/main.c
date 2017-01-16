@@ -31,10 +31,10 @@ int main(void)
 	char *argv[6] = {
 		"test",
 		"10",
-		"16",
-		"10",
-		"123",
-		"158"
+		"2",
+		"-158",
+		"777",
+		"177"
 	};
 	if(argc < 4)
 	{
@@ -70,18 +70,23 @@ int main(void)
 		link_node->next = new_link_node;
 		link_node = new_link_node;
 		input = strtol(*(argv+i), NULL, input_type);
-		if(init_node(new_link_node, input))
+		if(link_node_init(new_link_node, input))
 			return -1;
 	}
-	print_link_list(&head_node);
-	if(convert_system(&head_node))
+	
+	link_list_print(&head_node);
+	
+	if(num_sys_convert(&head_node))
 	{
 		print_info(5);
-		release_link_list(&head_node);
+		link_list_release(&head_node);
 		return -1;
 	}
-	print_link_list(head_node.next);
-	release_link_list(&head_node);
+	
+	link_list_print(head_node.next);
+	
+	link_list_release(&head_node);
+	
 	return 0;
 }
 
@@ -92,7 +97,7 @@ void print_info(int opts)
 	\n", *(g_info + opts - 1));
 }
 
-int init_node(link_list_t *pnode, long int param)
+int link_node_init(link_list_t *pnode, long int param)
 {
 	pnode->elem = param;
 	pnode->res = (char *)malloc(BUF_SIZE*sizeof(char));
@@ -104,21 +109,23 @@ int init_node(link_list_t *pnode, long int param)
 	return 0;
 }
 
-void print_link_list(link_list_t *pnode)
+void link_list_print(link_list_t *pnode)
 {
 	link_list_t *link_node = pnode;
 	while(link_node)
 	{
 		printf("%ld\t", link_node->elem);
+		
 		if(link_node->res && link_node->res_cur_size)
 			printf("%s \n", link_node->res);
 		else
 			printf("NULL \n");
+		
 		link_node = link_node->next;
 	}
 }
 
-void release_link_list(link_list_t *pnode)
+void link_list_release(link_list_t *pnode)
 {
 	link_list_t *link_node = pnode->next;
 	while(link_node)
@@ -128,23 +135,28 @@ void release_link_list(link_list_t *pnode)
 			free(link_node->res);
 			link_node->res = NULL;
 		}
+		
 		free(link_node);
 		link_node = link_node->next;
 	}
+	
 	pnode->next = NULL;
 }
 
-int convert_system(link_list_t *pnode)
+int num_sys_convert(link_list_t *pnode)
 {
 	link_list_t *link_node = pnode->next; //ignore head_node
-	unsigned int type = (unsigned int) pnode->elem;
+	unsigned int type = (pnode->elem < 0) ? (pnode->elem * -1) : pnode->elem;
 	char *flag = NULL;
 	char *tmp_node = NULL;
 	long int temp = 0;
+	
 	while(link_node)
 	{
 		flag = link_node->res;
+		//temp = (link_node->elem < 0) ? (link_node->elem * -1) : link_node->elem;
 		temp = link_node->elem;
+		
 		while(temp)
 		{
 			if(link_node->res_cur_size >= link_node->res_size)
@@ -152,43 +164,49 @@ int convert_system(link_list_t *pnode)
 				tmp_node = (char *)realloc(link_node->res, link_node->res_size+BUF_SIZE);
 				if(!tmp_node)
 					return -1;
+				
 				link_node->res = tmp_node;
 				link_node->res_size += BUF_SIZE;
+				flag = link_node->res + link_node->res_cur_size;//point to new address
 			}
+
 			*flag++ = symbol_table[temp % type];
 			link_node->res_cur_size++;
 			temp /= type;
 		}
+		
 		link_node = link_node->next;
 	}
 
+	link_value_reverse(pnode);
+	
 	return 0;
 }
 
-int reverse_link_node_(link_list_t *pnode)
+int link_value_reverse(link_list_t *pnode)
 {
 	link_list_t *link_node = pnode->next;
-	char *head_ptr = NULL, *tail_ptr = NULL, *temp = NULL;
+	char *head_ptr = NULL, *tail_ptr = NULL;
 	int i = 0, size = 0;
-	while(link_node)
+	char temp = 0;
+	
+	for(;link_node != NULL; link_node = link_node->next)
 	{
+		
 		size = link_node->res_cur_size / 2;
-		head_ptr = link_node->res;
-		tail_ptr = link_node->res + link_node->res_cur_size;
-		if(head_ptr && tail_ptr)
-		{
-			for(i = 0; i < size; i++)
-			{
-				*temp = *head_ptr;
-				*head_ptr++ = *tail_ptr;
-				*tail_ptr-- = *temp;
-			}
-			link_node = link_node->next;
-		}
-		else
-		{
-			link_node = link_node->next;
+		if(!size)
 			continue;
+		
+		head_ptr = link_node->res;
+		tail_ptr = link_node->res + link_node->res_cur_size - 1;
+		if((!head_ptr) || (!tail_ptr))
+			continue;
+		
+		for(i = 0; i < size; i++)
+		{
+			temp = *head_ptr;
+			*head_ptr++ = *tail_ptr;
+			*tail_ptr-- = temp;
 		}
 	}
 	
