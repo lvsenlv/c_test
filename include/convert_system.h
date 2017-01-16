@@ -17,11 +17,11 @@ typedef struct link_list {
 } link_list_t;
 
 void print_info(int opts);
-int init_node(link_list_t *pnode, long int param);
-void print_link_list(link_list_t *pnode);
-void release_link_list(link_list_t *pnode);
-int convert_system(link_list_t *pnode);
-int reverse_link_node(link_list_t *pnode);
+int link_node_init(link_list_t *pnode, long int param);
+void link_list_print(link_list_t *pnode);
+void link_list_release(link_list_t *pnode);
+int num_sys_convert(link_list_t *pnode);
+int link_value_reverse(link_list_t *pnode);
 
 #endif
 
