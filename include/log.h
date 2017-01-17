@@ -14,8 +14,8 @@
 #define LOG_NAME_LEN			128
 #define LOG_FILE_SIZE			1024		//unit of size is byte
 #define LOG_CONF_PATH			"conf/log.conf"
-#define LOG_CMD_LEVEL			"cat /root/test/conf/log.conf | grep LOG_LEVEL"
-#define LOG_CMD_PATH			"cat /root/test/conf/log.conf | grep LOG_DIR"
+#define LOG_CMD_LEVEL			"cat conf/log.conf | grep LOG_LEVEL"
+#define LOG_CMD_PATH			"cat conf/log.conf | grep LOG_DIR"
 #define LOG_CONF_CHECK 			({ \
 	int ret = 0; \
 	if (access(LOG_CONF_PATH, F_OK)) \
@@ -26,7 +26,7 @@
 	ret; \
 	})
 
-#define LOG(level, format, args...) ({ \
+#define DISP_LOG(level, format, args...) ({ \
 	if (level < LOG_LEVEL_MAX) \
 	{ \
 		log_check(); \

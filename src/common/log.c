@@ -14,9 +14,11 @@
 static char g_log_name[LOG_NAME_LEN] = {0};
 FILE *g_log_file = NULL;
 char *log_str[] = {
+	"STOP",
 	"ERROR",
 	"DEBUG",
-	};
+};
+
 static inline void log_close(void);
 static void before_main(void) __attribute__((constructor));
 
@@ -51,7 +53,7 @@ void log_init(void)
 	
 		if (setvbuf(g_log_file, NULL, _IONBF, 0))
 		{
-			LOG(LOG_LEVEL_ERROR, "setvbuf error \n");
+			DISP_LOG(LOG_LEVEL_ERROR, "setvbuf error \n");
 		}
 	}
 	
