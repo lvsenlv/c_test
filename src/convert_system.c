@@ -15,16 +15,16 @@ extern char *g_info[];
 extern char g_symbol_table[];
 extern int g_num_table[];
 
-//int main(int argc, char *argv[])
-int main(void)
+int main(int argc, char *argv[])
+//int main(void)
 {
-	int argc = 4;
+	/*int argc = 4;
 	char *argv[4] = {
 		"test",
 		"-16",
 		"-10",
 		"ABc"
-	};
+	};*/
 #ifdef __DEBUG__
 	struct timeval start_usec;
 	struct timeval stop_usec;
