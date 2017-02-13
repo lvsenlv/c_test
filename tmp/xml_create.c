@@ -12,9 +12,84 @@
 
 #define 	XML_FILE_NAME 		"/root/test/1.xml"
 #define 	BUF_SIZE 			128
-#define 	XML_DEBUG
 
-#ifdef XML_DEBUG
+#ifdef _XML_DEBUG
+int main(int argc, char **argv)
+{
+	char buf[BUF_SIZE] = {0};	
+	if(!access(XML_FILE_NAME, F_OK))
+	{
+		snprintf(buf, sizeof(buf), "rm %s", XML_FILE_NAME);
+		system(buf);
+	}
+	
+	xmlDocPtr doc = xmlNewDoc(BAD_CAST "1.0");
+	xmlNodePtr root_node = xmlNewNode(NULL, BAD_CAST "all_products");
+	xmlDocSetRootElement(doc ,root_node);
+
+	xmlNodePtr node = NULL, tmp_node = NULL;
+	node = xmlNewNode(NULL, BAD_CAST "products");
+	xmlAddChild(root_node, node);
+	tmp_node = xmlNewNode(NULL, BAD_CAST "product");
+	xmlNewProp(tmp_node, BAD_CAST "name", BAD_CAST "name11");
+	xmlNewProp(tmp_node, BAD_CAST "value", BAD_CAST "value11");
+	xmlAddChild(tmp_node, xmlNewText(BAD_CAST "content11"));
+	xmlAddChild(node, tmp_node);
+	tmp_node = xmlNewNode(NULL, BAD_CAST "product");
+	xmlNewProp(tmp_node, BAD_CAST "name", BAD_CAST "name12");
+	xmlNewProp(tmp_node, BAD_CAST "value", BAD_CAST "value12");
+	xmlAddChild(tmp_node, xmlNewText(BAD_CAST "content12"));
+	xmlAddChild(node, tmp_node);
+	tmp_node = xmlNewNode(NULL, BAD_CAST "product");
+	xmlNewProp(tmp_node, BAD_CAST "name", BAD_CAST "name13");
+	xmlNewProp(tmp_node, BAD_CAST "value", BAD_CAST "value13");
+	xmlAddChild(tmp_node, xmlNewText(BAD_CAST "content13"));
+	xmlAddChild(node, tmp_node);
+	tmp_node = xmlNewNode(NULL, BAD_CAST "product");
+	xmlNewProp(tmp_node, BAD_CAST "name", BAD_CAST "name14");
+	xmlNewProp(tmp_node, BAD_CAST "value", BAD_CAST "value14");
+	xmlAddChild(tmp_node, xmlNewText(BAD_CAST "content14"));
+	xmlAddChild(node, tmp_node);
+
+	node = xmlNewNode(NULL, BAD_CAST "products");
+	xmlAddChild(root_node, node);
+	tmp_node = xmlNewNode(NULL, BAD_CAST "product");
+	xmlNewProp(tmp_node, BAD_CAST "name", BAD_CAST "name21");
+	xmlNewProp(tmp_node, BAD_CAST "value", BAD_CAST "value21");
+	xmlAddChild(tmp_node, xmlNewText(BAD_CAST "content21"));
+	xmlAddChild(node, tmp_node);
+	tmp_node = xmlNewNode(NULL, BAD_CAST "product");
+	xmlNewProp(tmp_node, BAD_CAST "name", BAD_CAST "name22");
+	xmlNewProp(tmp_node, BAD_CAST "value", BAD_CAST "value22");
+	xmlAddChild(tmp_node, xmlNewText(BAD_CAST "content22"));
+	xmlAddChild(node, tmp_node);
+	tmp_node = xmlNewNode(NULL, BAD_CAST "product");
+	xmlNewProp(tmp_node, BAD_CAST "name", BAD_CAST "name23");
+	xmlNewProp(tmp_node, BAD_CAST "value", BAD_CAST "value23");
+	xmlAddChild(tmp_node, xmlNewText(BAD_CAST "content23"));
+	xmlAddChild(node, tmp_node);
+
+	node = xmlNewNode(NULL, BAD_CAST "products");
+	xmlAddChild(root_node, node);
+	tmp_node = xmlNewNode(NULL, BAD_CAST "product");
+	xmlNewProp(tmp_node, BAD_CAST "name", BAD_CAST "name31");
+	xmlNewProp(tmp_node, BAD_CAST "value", BAD_CAST "value31");
+	//xmlAddChild(tmp_node, xmlNewText(BAD_CAST "content31"));
+	xmlAddChild(node, tmp_node);
+	tmp_node = xmlNewNode(NULL, BAD_CAST "product");
+	xmlNewProp(tmp_node, BAD_CAST "name", BAD_CAST "name32");
+	xmlNewProp(tmp_node, BAD_CAST "value", BAD_CAST "value32");
+	//xmlAddChild(tmp_node, xmlNewText(BAD_CAST "content32"));
+	xmlAddChild(node, tmp_node);
+
+	xmlSaveFormatFileEnc(XML_FILE_NAME, doc, "UTF-8", 1);
+	xmlFreeDoc(doc);
+
+	return 0;
+}
+#endif //_XML_DEBUG
+
+#ifdef _XML_FORMAL
 extern char *xml_strings[];
 int main(int argc, char **argv)
 {
@@ -50,8 +125,9 @@ int main(int argc, char **argv)
 
 	return 0;
 }
+#endif //_XML_FORMAL
 
-#else
+#ifdef _XML_EXAMPLE
 int main(void)
 {
 	char buf[BUF_SIZE] = {0};	
@@ -101,7 +177,7 @@ int main(void)
 	
     return 0;
 }
-#endif //XML_DEBUG
+#endif //_XML_EXAMPLE
 
 char *xml_strings[] = {
 "系统文件损坏，请联系管理员！",
