@@ -8,15 +8,47 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <dirent.h>
 #include <libxml/parser.h>
 
+#define     XML_FILE_PATH       "/root/test"
 #define 	XML_FILE_NAME 		"/root/test/1.xml"
 #define 	BUF_SIZE 			128
 
-#ifdef _XML_DEBUG
+#ifndef _DEBUG_0
+#ifndef _DEBUG_1
+#ifndef _DEBUG_2
+char *str[] = {
+    XML_FILE_PATH,
+    "_DEBUG_0 : simple example of creating 1.xml",
+    "_DEBUG_1 : complex example of creating 1.xml",
+    "_DEBUG_2 : middle example of creating 1.xml",
+    NULL,
+};
+
+int main(int argc, char **argv)
+{
+    char **ptr = str;
+
+    while(*ptr)
+        printf("%s \n", *ptr++);
+
+    return 0;
+}
+
+#endif
+#endif
+#endif
+
+#ifdef _DEBUG_2
 int main(int argc, char **argv)
 {
 	char buf[BUF_SIZE] = {0};	
+    if(!opendir(XML_FILE_PATH))
+    {
+		snprintf(buf, sizeof(buf), "mkdir -p %s", XML_FILE_PATH);
+        system(buf);
+    }
 	if(!access(XML_FILE_NAME, F_OK))
 	{
 		snprintf(buf, sizeof(buf), "rm %s", XML_FILE_NAME);
@@ -87,13 +119,19 @@ int main(int argc, char **argv)
 
 	return 0;
 }
-#endif //_XML_DEBUG
+#endif //_DEBUG_2
 
-#ifdef _XML_FORMAL
+#ifdef _DEBUG_1
 extern char *xml_strings[];
+
 int main(int argc, char **argv)
 {
 	char buf[BUF_SIZE] = {0};	
+    if(!opendir(XML_FILE_PATH))
+    {
+		snprintf(buf, sizeof(buf), "mkdir -p %s", XML_FILE_PATH);
+        system(buf);
+    }
 	if(!access(XML_FILE_NAME, F_OK))
 	{
 		snprintf(buf, sizeof(buf), "rm %s", XML_FILE_NAME);
@@ -125,19 +163,23 @@ int main(int argc, char **argv)
 
 	return 0;
 }
-#endif //_XML_FORMAL
+#endif //_DEBUG_1
 
-#ifdef _XML_EXAMPLE
+#ifdef _DEBUG_0
 int main(void)
 {
 	char buf[BUF_SIZE] = {0};	
+    if(!opendir(XML_FILE_PATH))
+    {
+		snprintf(buf, sizeof(buf), "mkdir -p %s", XML_FILE_PATH);
+        system(buf);
+    }
 	if(!access(XML_FILE_NAME, F_OK))
 	{
 		snprintf(buf, sizeof(buf), "rm %s", XML_FILE_NAME);
 		system(buf);
 	}
 	
-
 	xmlDocPtr doc = NULL;
 	xmlNodePtr root_node = NULL, node = NULL, tmp_node = NULL;
 
@@ -177,7 +219,7 @@ int main(void)
 	
     return 0;
 }
-#endif //_XML_EXAMPLE
+#endif //_DEBUG_0
 
 char *xml_strings[] = {
 "系统文件损坏，请联系管理员！",
@@ -405,3 +447,4 @@ char *xml_strings[] = {
 "*座位号不能为空",
 NULL,
 };//char *xml_strings[]
+
