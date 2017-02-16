@@ -22,6 +22,8 @@ char *str[] = {
 	"_DUBUG_1 : 测试多线程进入挂起态后，当满足就绪条件后，就绪的先后顺序；",
 	"           主线程启动4个线程，每个线程有一个参数i（i=生成顺序），",
 	"           无论线程的启动顺序如何，执行顺序只能为，线程0、线程1、线程2、线程3。",
+	"_DUBUG_2 : gdb多线程调试练习，创建两个线程；",
+	"           一个线程往标准输出一个变量值，另一个线程则把另一个变量写入文件中",
 	NULL,
 };
 int main(int argc, char **agv)
@@ -47,6 +49,8 @@ int main(int argc, char **argv)
 	pthread_t pthread_id1, pthread_id2;
 	void *pthread_ret = NULL;
 	int ret = 0;
+
+	printf("%s id : %d \n", __func__, getpid());
 	
 	ret = pthread_create(&pthread_id1, NULL, print_log, NULL);
 	if(ret)
@@ -88,15 +92,16 @@ void *print_log(void *arg)
 	snprintf(buf, sizeof(buf), "%s", "mkdir -p /root/test");
 	system(buf);
 
-	snprintf(buf, sizeof(buf), "%s", "> /root/test/log");
-	system(buf);
-
+	snprintf(buf, sizeof(buf), "%s id : %lu", __func__, pthread_self());
+	snprintf(tmp_buf, sizeof(tmp_buf), "echo \"%s\" > /root/test/log", buf);
+	system(tmp_buf);
+	
 	while(++i)
 	{
 		snprintf(buf, sizeof(buf), "[%s][%d] : i = %d", __func__, __LINE__, i);
 		snprintf(tmp_buf, sizeof(tmp_buf), "echo \"%s\" >> /root/test/log", buf);
 		system(tmp_buf);
-		sleep(1);
+		//sleep(0.1);
 	}
 	
 	return NULL;
@@ -104,15 +109,17 @@ void *print_log(void *arg)
 
 void *print_std(void *arg)
 {
-	char buf[BUF_LEN] = {0};
-	int i = 0;
+	//char buf[BUF_LEN] = {0};
+	int i = 0;\
 	
+	printf("%s id : %lu \n", __func__, pthread_self());
 	while(++i)
 	{
-		snprintf(buf, sizeof(buf), "[%s][%d] : i = %d", __func__, __LINE__, i);
-		system(buf);
+		printf("[%s][%d] : i = %d \n", __func__, __LINE__, i);
+		//system(buf);
 		sleep(1);
 	}
+	
 	return NULL;
 }
 
@@ -215,13 +222,13 @@ int main(int argc, char** argv)
 	}
 	printf("thread 1 exit code %d \n", (int)pthread_ret);
 	
-	/*ret = pthread_join(pthread_id2, &pthread_ret);
+	ret = pthread_join(pthread_id2, &pthread_ret);
 	if(ret)
 	{
 		printf("error in pthread_join: %s \n", strerror(ret));
 		exit(-1);
 	}
-	printf("thread 2 exit code %d \n", (int)pthread_ret);*/
+	printf("thread 2 exit code %d \n", (int)pthread_ret);
 	
 	return 0;
 }
