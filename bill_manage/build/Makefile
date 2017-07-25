@@ -1,6 +1,6 @@
 LIBS = -lncursesw -lpthread
 DEF = -D__OS 
-#DEF += _D__CHINESE
+#DEF += -D__CHINESE
 
 test : bill_manage.o common.o
 	gcc $< -o $@ $(LIBS)
