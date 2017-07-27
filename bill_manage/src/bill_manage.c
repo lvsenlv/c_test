@@ -2,11 +2,10 @@
 	> File Name: bill_manage.c
 	> Author: lvsenlv
 	> Mail: lvsen46000@163.com
-	> Created Time: 2017年07月24日 星期一 10?08分33秒
+	> Created Time: 2017年07月24日 星期一 10时08分33秒
  ************************************************************************/
 
 #include "bill_manage.h"
-#include <stdlib.h>
 #include <unistd.h>
 #include <locale.h>
 #include <string.h>
@@ -14,6 +13,7 @@
 volatile int g_cur_pos_y = 0;
 volatile int g_cur_pos_x = 0;
 FILE *g_conf_file_fp = NULL;
+FILE *g_data_file_fp = NULL;
 char g_conf_file[CONF_FILE_SIZE];
 char g_buf[BUF_SIZE];
 
@@ -22,16 +22,19 @@ int main(void)
     setlocale(LC_ALL,"");
     initscr();
     cbreak();
-    nonl();
-    //noecho();
+    nonl();    
     keypad(stdscr, true);
 
     refresh();  
 
     draw_std_screen();
-    if(login() != 0)
+    
+    if(login() != STAT_OK)
         return -1;
 
+    
+
+    sleep(3);
     endwin();
     return 0;
 }
@@ -52,12 +55,11 @@ void draw_std_screen(void)
     refresh();
 }
 
-int login(void)
+G_STATUS login(void)
 {    
     WINDOW *login_win = newwin(LOGIN_WIN_LINES, LOGIN_WIN_COLS, LOGIN_WIN_START_Y, LOGIN_WIN_START_X);
     int cur_pos_y = 1, cur_pos_x = 1;
-    box(login_win, ACS_VLINE, ACS_HLINE);
-    keypad(login_win, true);
+    box(login_win, ACS_VLINE, ACS_HLINE);    
     
 #ifdef __CHINESE
     mvwaddstr(login_win, cur_pos_y++, (LOGIN_WIN_COLS-(sizeof(STR_LOGIN)-1)*2/3)/2, STR_LOGIN);
@@ -71,12 +73,12 @@ int login(void)
     wmove(login_win, cur_pos_y, cur_pos_x);  
     wrefresh(login_win);
 
+    //input user name
     char user_name[LOGIN_WIN_USER_NAME_SIZE];
-
     cur_pos_y = 2;
-    cur_pos_x = 1 + sizeof(STR_LOGIN_PASSWORD);
+    cur_pos_x = 1 + sizeof(STR_LOGIN_USER);
     wmove(login_win, cur_pos_y, cur_pos_x);
-    wrefresh(login_win);
+    wrefresh(login_win);    
     wgetnstr(login_win, user_name, LOGIN_WIN_USER_NAME_SIZE-1);
     do
     {
@@ -85,54 +87,106 @@ int login(void)
         {
             break;
         }
-        win_disp(login_win, STR_LOGIN_USER_NOT_EXIST);
+        win_disp(login_win, g_err_info[STR_ERR_USER_NOT_EXIST]);
         mvwaddstr(login_win, cur_pos_y, cur_pos_x, LOGIN_WIN_EMPTY_STR);
         wmove(login_win, cur_pos_y, cur_pos_x);
         wrefresh(login_win);
         wgetnstr(login_win, user_name, LOGIN_WIN_USER_NAME_SIZE-1);
     }while(1);
 
+    //get password in the conf file
     g_conf_file_fp = fopen(g_conf_file, "r");
-    if(g_conf_file_fp == NULL)
+    if(NULL == g_conf_file_fp)
     {
         delwin(login_win);
         endwin();
-        DISP_ERR("error in fopen");
-        return -1;
+        DISP_ERR(g_err_info[STR_ERR_CONF_FILE]);
+        return STAT_ERR;
     }
-
-    if(fgets(g_buf, BUF_SIZE, g_conf_file_fp) == NULL)
+    if(NULL == fgets(g_buf, BUF_SIZE, g_conf_file_fp))
     {
         delwin(login_win);
         endwin();
-        DISP_ERR("error in fgets");
-        return -1;
+        DISP_ERR(g_err_info[STR_ERR_CONF_FILE]);
+        return STAT_ERR;
+    }
+        
+    if((g_buf[0] != 'p') || (g_buf[1] != 'a') || (g_buf[2] != 's') || 
+        (g_buf[3] != 's') || (g_buf[4] != 'w') || (g_buf[5] != 'o') || 
+        (g_buf[6] != 'r') || (g_buf[7] != 'd') || (g_buf[8] != '='))
+    {
+        delwin(login_win);
+        endwin();
+        DISP_ERR(g_err_info[STR_ERR_GET_PASSWORD]);
+        return STAT_ERR;
     }
     
-    char password[LOGIN_WIN_PASSWORD_SIZE] = "123456";
     char correct_password[LOGIN_WIN_PASSWORD_SIZE];
-    char *ptr = g_buf, *tmp_ptr = correct_password;
-    while((*ptr != '\0') && (*ptr != '='))
+    char *ptr = &g_buf[9], *tmp_ptr = correct_password;
+    while((*ptr != '\n') && (*ptr != '\0'))
     {
-        ptr++;
+        *tmp_ptr++ = *ptr++; //it may overflow if password is too long in conf file
     }
-    if(*ptr == '=')
-        ptr++;
-    while((*ptr != '\0') && (*ptr != '\n'))
+    tmp_ptr = '\0';
+    fclose(g_conf_file_fp);
+
+    //input password
+    char password[LOGIN_WIN_PASSWORD_SIZE];
+    cur_pos_y = 3;
+    cur_pos_x = 1 + sizeof(STR_LOGIN_PASSWORD);
+    wmove(login_win, cur_pos_y, cur_pos_x);
+    wrefresh(login_win);
+    noecho();
+    keypad(login_win, true);
+    int ch, i;
+    tmp_ptr = password;
+    do
     {
-        *tmp_ptr++ = *ptr++;
-    }
-    *tmp_ptr = '\0';
-    if(strcmp(correct_password, password) == 0)
-    {
-        win_disp(login_win, "login success");
-    }
+        i = 0;
+        while(1)
+        {
+            ch = wgetch(login_win);
+            if((ch >= KEY_CODE_YES) && (ch < KEY_BACKSPACE))
+                continue;
+            else if(ch > KEY_BACKSPACE)
+                continue;
+            else if(KEY_BACKSPACE == ch)
+            {
+                mvwaddch(login_win, cur_pos_y, --cur_pos_x, ' ');
+                i--;
+            }
+            else if(13 == ch) //enter key
+            {
+                break;
+            }
+            else
+            {
+                if(i >= (LOGIN_WIN_PASSWORD_SIZE-1))
+                    continue;
+                waddch(login_win, '*');
+                cur_pos_x++;
+                tmp_ptr[i++] = (char)ch;
+            }
+            wmove(login_win, cur_pos_y, cur_pos_x);
+        }
+
+        tmp_ptr[i] = '\0';
+        if(0 == strcmp(correct_password, password))
+        {
+            break;
+        }
+        win_disp(login_win, g_err_info[STR_ERR_PASSWORD_ERR]);
+        cur_pos_x = 1 + sizeof(STR_LOGIN_PASSWORD);
+        mvwaddstr(login_win, cur_pos_y, cur_pos_x, LOGIN_WIN_EMPTY_STR);
+        wmove(login_win, cur_pos_y, cur_pos_x);
+        //wrefresh(login_win); //It will auto refresh when the next time of using wgetch
+    }while(1);
+    echo();
     
-    sleep(3);
     delwin(login_win);
     touchline(stdscr, LOGIN_WIN_START_Y, LOGIN_WIN_LINES);
     refresh();
-    return 0;
+    return STAT_OK;
 }
 
 void win_disp(WINDOW *win, const char *ptr)

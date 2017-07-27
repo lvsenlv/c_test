@@ -1,5 +1,5 @@
 LIBS = -lncursesw -lpthread
-DEF = -D__OS 
+DEF = -D__OS -D__LINUX
 #DEF += -D__CHINESE
 
 test : bill_manage.o common.o

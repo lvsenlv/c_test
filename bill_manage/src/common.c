@@ -69,7 +69,7 @@ void __attribute__((destructor)) after_main(void)
 
     #ifdef __LINUX
         STOP_COUNT;
-        START_STOP;
+        GET_TIME;
     #endif //__LINUX
 #endif //__OS
 }
