@@ -1,49 +1,22 @@
 On branch master
 Your branch is up-to-date with 'origin/master'.
-Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
 
-	deleted:    README.md
-	new file:   bill_manage/build/.config_file
-	new file:   bill_manage/build/.message_file
-	new file:   bill_manage/build/Makefile
-	new file:   bill_manage/include/bill_manage.h
-	new file:   bill_manage/include/common.h
-	new file:   bill_manage/src/bill_manage.c
-	new file:   bill_manage/src/common.c
-	deleted:    build/Makefile
-	deleted:    build/cp_makefile.sh
-	deleted:    build/rm_makefile.sh
-	new file:   chat_tool/build/.config_file
-	new file:   chat_tool/build/.message_file
-	new file:   chat_tool/build/Makefile
-	new file:   chat_tool/include/chat_tool.h
-	new file:   chat_tool/include/common.h
-	new file:   chat_tool/src/chat_tool.c
-	new file:   chat_tool/src/common.c
-	renamed:    src/3t/3t_test.c -> else/3t/3t_test.c
-	renamed:    include/3t/3t_test.h -> else/3t/3t_test.h
-	renamed:    conf/log.conf -> else/log/conf/log.conf
-	renamed:    src/common/log.c -> else/log/log.c
-	renamed:    include/log.h -> else/log/log.h
-	renamed:    src/gtk/Makefile_bk -> gtk/Makefile
-	renamed:    src/gtk/main.c -> gtk/main.c
-	deleted:    include/convert_system.h
-	deleted:    modify_info
-	deleted:    src/Make.defines
-	deleted:    src/Makefile
-	deleted:    src/main
-	renamed:    src/thread/Makefile_bk -> thread/Makefile
-	renamed:    src/thread/test_thread.c -> thread/test_thread.c
-	renamed:    src/xml/1.xml -> xml/1.xml
-	renamed:    src/xml/Makefile_bk -> xml/Makefile
-	renamed:    src/xml/signed.xml -> xml/signed.xml
-	renamed:    src/xml/text.xml -> xml/text.xml
-	renamed:    src/xml/xml_create.c -> xml/xml_create.c
-	renamed:    src/xml/xml_parse.c -> xml/xml_parse.c
+	deleted:    bill_manage/build/.config_file
+	deleted:    bill_manage/build/.lvsenlv.conf
+	deleted:    bill_manage/build/Makefile
+	deleted:    bill_manage/include/bill_manage.h
+	deleted:    bill_manage/include/common.h
+	deleted:    bill_manage/src/bill_manage.c
+	deleted:    bill_manage/src/common.c
+	modified:   modify_info
 
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
 
-	modify_info
+	bill/
+	manage_system/
 
+no changes added to commit (use "git add" and/or "git commit -a")
