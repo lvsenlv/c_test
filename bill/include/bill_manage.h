@@ -59,10 +59,10 @@ typedef enum {
 }G_FLAG;
 
 
-//Storage format: #TY2017.08.01.16:30:20T#O333O#EdevelopE#R1024R#I512I#
-//Parse: time=2017.08.01.16:30:20 ouput=333 entry_ptr=develop remain=1024 input=512
+//Storage format: #TY2017.08.01.16:30:20-2T#O333O#EdevelopE#R1024R#I512I#
+//Parse: time=2017.08.01.16:30:20 Tuesday ouput=333 entry_ptr=develop remain=1024 input=512
 typedef struct bill_info {
-    int time[6];
+    int time[7];
     float output;
     char *entry_ptr;
     float remain;

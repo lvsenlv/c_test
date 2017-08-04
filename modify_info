@@ -1,22 +1,15 @@
 On branch master
 Your branch is up-to-date with 'origin/master'.
 Changes not staged for commit:
-  (use "git add/rm <file>..." to update what will be committed)
+  (use "git add <file>..." to update what will be committed)
   (use "git checkout -- <file>..." to discard changes in working directory)
 
-	deleted:    bill_manage/build/.config_file
-	deleted:    bill_manage/build/.lvsenlv.conf
-	deleted:    bill_manage/build/Makefile
-	deleted:    bill_manage/include/bill_manage.h
-	deleted:    bill_manage/include/common.h
-	deleted:    bill_manage/src/bill_manage.c
-	deleted:    bill_manage/src/common.c
+	modified:   bill/include/bill_manage.h
 	modified:   modify_info
 
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
 
-	bill/
-	manage_system/
+	encryption/
 
 no changes added to commit (use "git add" and/or "git commit -a")
