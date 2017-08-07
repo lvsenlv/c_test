@@ -13,6 +13,12 @@
 
 /******************************modifiable*******************************/
 #define     BUF_SIZE                        128
+#define     CLEAR_IN_BUF                    {while(getchar() != '\n');}
+#ifdef __LINUX
+    #define CLEAR                           system("clear")
+#elif defined __WINDOWS
+    #define CLEAR                           system("cls")
+#endif
 
 //#include <stdint.h>
 //typedef     char                            int8_t;
@@ -55,15 +61,25 @@ typedef enum {
         extern FILE *g_pDispFile;
         #define     DISP(format, args...) \
                     fprintf(g_pDispFile, format, ##args)
+        #ifdef __DEBUG
         #define     DISP_ERR(str) \
                     fprintf(g_pDispFile, "[%s][%d]: %s \n", __func__, __LINE__, str)
+        #else //__DEBUG
+        #define     DISP_ERR(str) \
+                    fprintf(g_pDispFile, "%s \n", str)
+        #endif //__DEBUG
         #define     DISP_ERR_PLUS(format, args...) \
                     fprintf(g_pDispFile, format, ##args)
     #else //REDIRECTION
         #define     DISP(format, args...) \
                     fprintf(stdout, format, ##args)
+        #ifdef __DEBUG
         #define     DISP_ERR(str) \
                     fprintf(stderr, "[%s][%d]: %s \n", __func__, __LINE__, str)
+        #else //__DEBUG
+        #define     DISP_ERR(str) \
+                    fprintf(stderr, "%s \n", str)
+        #endif //__DEBUG
         #define     DISP_ERR_PLUS(format, args...) \
                     fprintf(stderr, format, ##args)
     #endif //__REDIRECTION

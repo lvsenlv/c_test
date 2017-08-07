@@ -54,7 +54,7 @@ void __attribute__((constructor)) BeforeMain(void)
 {
 #ifdef __OS
     #ifdef __LINUX
-        START_COUNT;
+        //START_COUNT;
     #endif //__LINUX
 
     #ifdef __REDIRECTION
@@ -78,8 +78,8 @@ void __attribute__((destructor)) AfterMain(void)
     #endif //__REDIRECTION
 
     #ifdef __LINUX
-        STOP_COUNT;
-        GET_TIME;
+        //STOP_COUNT;
+        //GET_TIME;
     #endif //__LINUX
 #endif //__OS
 }
