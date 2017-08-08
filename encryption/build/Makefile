@@ -1,7 +1,7 @@
 CC = gcc
 OBJS = common.o encryption.o
 LIBS = 
-DEF = -D__OS -D__LINUX -D__64BIT
+DEF = -D__OS -D__LINUX -D__64BIT -D__CHINESE
 $(shell mkdir -p ./objects)
 
 test : $(OBJS)

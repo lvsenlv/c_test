@@ -5,12 +5,17 @@
 	> Created Time: 2017年08月03日 星期四 08时37分45秒
  ************************************************************************/
 
+#ifdef __LINUX
+#define _FILE_OFFSET_BITS 64 //make sure st_size is 64bits instead of 32bits
+#endif
+
 #include "encryption.h"
 #include <string.h>
+#include <sys/stat.h>
 
 static char g_buf[BUF_SIZE];
 static FILE *g_fp = NULL;
-__IO static uint64_t g_FileSize = 0;
+__IO static int64_t g_FileSize = 0;
 
 int main(void)
 {
@@ -23,15 +28,24 @@ int main(void)
     g_fp = fopen(FileName, "rb");
     if(NULL == g_fp)
     {
+#ifdef __CHINESE        
         DISP_ERR_PLUS("错误：打开文件 \"%s\" 失败 \n请检查文件是否存在以及路径是否正确 \n", FileName);
+#else
+        DISP_ERR_PLUS("Error: Fail to open \"%s\" \nPlease make sure it does exist and path is available", FileName);
+#endif
         return -1;
     }
     
     if(InputPassword(password) != STAT_OK)
         return -1;
-
-    fseek(g_fp, 0, SEEK_END);
-    g_FileSize = ftell(g_fp);
+    
+#ifdef __LINUX
+    fseeko(g_fp, 0, SEEK_END);
+    g_FileSize = ftello(g_fp);
+#elif defined __WINDOWS
+    _fseeki64(g_fp, 0, SEEK_END);
+    g_FileSize = _ftelli64(g_fp);
+#endif
     Encrypt_KB_File(FileName, password);
     fclose(g_fp);
     g_fp = NULL;
@@ -116,13 +130,20 @@ G_STATUS InputPassword(char *pPassword)
             return STAT_ERR;            
         }
 
+#ifdef __CHINESE
         DISP("警告：请再次确认你的秘钥是否为：\n%s \n", pPassword);
-        DISP("1. 确认继续解密请输入 y 或 Y 并回车 \n");
-        DISP("2. 重新输入密钥请输入 r 或 R 并回车 \n");
-        DISP("3. 其他输入将退出程序 \n");
+        DISP("1. 继续：请输入 y 或 Y 并回车 \n");
+        DISP("2. 重新输入：请输入 r 或 R 并回车 \n");
+        DISP("3. 退出程序：请输入其他按键并回车 \n");
+#else
+        DISP("Warning: Confirm your key is: \n%s \n", pPassword);
+        DISP("1. Continue: Press y or Y and Enter \n");
+        DISP("2. Retry: Press r or R and Enter \n");
+        DISP("3. Exit: Press other keys and Enter \n");
+#endif
         i = 0;
         flag = 0;
-        ch = getchar();
+        ch = getchar(); 
         while(1)
         {
             if('\n' == ch)
@@ -148,6 +169,13 @@ G_STATUS InputPassword(char *pPassword)
             return STAT_ERR;
         
     }
+    
+    return STAT_OK;
+}
+
+G_STATUS GetFileSize(const char *pFileName)
+{
+    struct stat FileInfo;
     
     return STAT_OK;
 }
@@ -267,7 +295,7 @@ G_STATUS Encrypt_KB_File(const char *pFileName, const char *pPassword)
     }
 
     //encrypt proccess 3
-    if(g_FileSize > 512)
+    if(g_FileSize > 256)
     {
         pTmp = pData;
         pTmp2 = pData + g_FileSize - 1;
@@ -372,7 +400,7 @@ G_STATUS Decrypt_KB_File(const char *pFileName, const char *pPassword)
     uint32_t i = 0;
 
     //encrypt proccess 3
-    if(g_FileSize > 512)
+    if(g_FileSize > 256)
     {
         pTmp = pData;
         pTmp2 = pData + g_FileSize - 1;

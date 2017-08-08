@@ -30,14 +30,14 @@ typedef     unsigned int                    uint32_t;
 #ifdef __LINUX
     #ifdef __32BIT
         typedef     long long                       int64_t;
-        typedef     unsigned long                   uint64_t;
+        typedef     unsigned long long              uint64_t;
     #elif defined __64BIT
         typedef     long                            int64_t;
         typedef     unsigned long                   uint64_t;
     #endif
 #elif defined __WINDOWS
     typedef     long long                       int64_t;
-    typedef     unsigned long                   uint64_t;
+    typedef     unsigned long long              uint64_t;
 #endif
 
 //#undef      NULL

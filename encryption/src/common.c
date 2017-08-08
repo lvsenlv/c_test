@@ -16,7 +16,7 @@
         #error "You must assign the platform as __LINUX or __WINDOWS"
     #endif
     
-    #ifdef __64BIT
+    #ifdef __32BIT
         #pragma message("Activate __32BIT")
     #elif defined __64BIT
         #pragma message("Activate __64BIT")
