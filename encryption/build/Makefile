@@ -1,15 +1,15 @@
 CC = gcc
-OBJS = common.o encryption.o
-LIBS = 
+OBJS = common.o main.o control.o
+OBJS_DIR = ./objects
+LIBS = -lncursesw
 DEF = -D__OS -D__LINUX -D__64BIT -D__CHINESE
-$(shell mkdir -p ./objects)
+$(shell mkdir -p $(OBJS_DIR))
 
 test : $(OBJS)
-	$(CC) $(wildcard ./objects/*.o) -o $@ $(LIBS)
+	$(CC) $(wildcard $(OBJS_DIR)/*.o) -o $@ $(LIBS)
 
 %.o : ../src/%.c
-	$(CC) -c $< -o $@ -I../include $(LIBS) $(DEF) -g -Wall
-	mv $@ ./objects
+	$(CC) -c $< -o $(OBJS_DIR)/$@ -I../include $(DEF) -g -Wall $(LIBS)
 
 clean :
-	rm -rf objects/ test *.*crypt
+	rm -rf $(OBJS_DIR) test *.*crypt

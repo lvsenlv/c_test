@@ -32,6 +32,8 @@
 #define STR_ERR_WRITE_FILE_ERR              "错误：写入文件失败，请确保文件可写"
 #define STR_ERR_INPUT_LEN_OUT_SIZE          "错误：输入长度超出限制"
 #define STR_ERR_INPUT_NULL                  "错误：输入不能为空"
+#define STR_ERR_GET_FILE_SIZE_ERR           "错误：获取文件大小失败"
+
 #else //__CHINESE
 #define STR_INPUT_FILE_NAME                 "Please input filename with full path: \n"
 #define STR_INPUT_PASSWORD                  "Please input key: \n"
@@ -45,16 +47,8 @@
 #define STR_ERR_WRITE_FILE_ERR              "Error: Fail to write to file, make sure it is writeable"
 #define STR_ERR_INPUT_LEN_OUT_SIZE          "Error: Input length is out of limit"
 #define STR_ERR_INPUT_NULL                  "Error: Input could not be null"
+#define STR_ERR_GET_FILE_SIZE_ERR           "Error: Fail to get file size"
 #endif //__CHINESE
-
-G_STATUS InputFileName(char *pFileName);
-G_STATUS InputPassword(char *pPassword);
-G_STATUS Encrypt_KB_File(const char *pFileName, const char *pPassword);
-G_STATUS Encrypt_MB_File(const char *pFileName, const char *pPassword);
-G_STATUS Encrypt_GB_File(const char *pFileName, const char *pPassword);
-
-G_STATUS Decrypt_KB_File(const char *pFileName, const char *pPassword);
-
 
 #endif
 
