@@ -20,15 +20,6 @@
 #define CTL_ExitConsole()                   exit(0)
 #endif
 
-#define CTL_STR_CHOOSE_LANG_ENGLISH         "English"
-#define CTL_STR_CHOOSE_LANG_CHINESE         "中文"
-
-typedef enum CTL_STR_INFO
-{
-    CTL_STR_EXIT = 0,
-
-}CTL_STR;
-
 void CTL_InitConsole(void);
 G_STATUS CTL_ChooseLanguage(void);
 

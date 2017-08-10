@@ -6,16 +6,11 @@
  ************************************************************************/
 
 #include "control.h"
+#include "control_str.h"
+#include <string.h>
 
-static char *g_pEnStr[] = {
-    "Press Esc to exit. Encryption system designed by lvsenlv",
-};
-static char *g_pChStr[] = {
-    "按Esc键退出。本加密系统由lvsenlv设计。",
-};
 char **g_pStr = g_pEnStr;
-
-
+char g_FlagLanguage = 0; //0 is English and 1 is Chinese
 
 #ifdef __LINUX
 #include <locale.h>
@@ -93,18 +88,40 @@ G_STATUS CTL_ChooseLanguage(void)
     }
 
     g_pStr = (flag == 1) ? g_pChStr : g_pEnStr;
+    g_FlagLanguage = flag;
     delwin(win);
     touchline(stdscr, (LINES-lines)/2, (COLS-cols)/2);
     refresh();
     return STAT_OK;
 }
-#elif defined __WINDOWS
-#endif
 
 G_STATUS CTL_ShowMenu(void)
 {
+    border('+', '+', '-', '-', '+', '+', '+', '+');
+    int LabelSize = strlen(g_pStr[CTL_STR_LABEL]);
+
+    attron(A_REVERSE);
+    if(g_FlagLanguage)
+    {
+        mvaddstr(0, (COLS-LabelSize*2/3)/2, g_pStr[CTL_STR_LABEL]);
+    }
+    else
+    {
+        mvaddstr(0, (COLS-LabelSize)/2, g_pStr[CTL_STR_LABEL]);
+    }
+
+    attron(A_BOLD);
+    mvaddstr(LINES-2, 1, g_pStr[CTL_STR_END_LINE]);
+    attroff(A_REVERSE | A_BOLD);
+
+    refresh();
     return STAT_OK;
 }
+
+#elif defined __WINDOWS
+#endif
+
+
 
 
 

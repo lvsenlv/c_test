@@ -16,6 +16,7 @@ int main(void)
         CTL_ExitConsole();
         return 0;
     }
+    CTL_ShowMenu();
 
     while(1);
     CTL_ExitConsole();
