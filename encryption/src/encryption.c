@@ -19,8 +19,13 @@ static G_STATUS Encrypt_MB_File(FILE *fp, const char *pFileName, int64_t FileSiz
 static G_STATUS Encrypt_GB_File(FILE *fp, const char *pFileName, int64_t FileSize);
 static G_STATUS Decrypt_KB_File(FILE *fp, const char *pFileName, int64_t FileSize);
 
+char g_password[CYT_PASSWORD_LENGHT];
 
-char g_password[PASSWORD_LENGHT];
+G_STATUS encrypt(char *pFunc)
+{
+    
+}
+
 
 #ifdef __LINUX
 static G_STATUS GetFileSize(const char *pFileName, int64_t *pFileSize)
@@ -176,7 +181,7 @@ static G_STATUS Encrypt_KB_File(FILE *fp, const char *pFileName, int64_t FileSiz
     FILE *NewFp = fopen(NewFileName, "wb+");
     if(NULL == NewFp)
     {
-        DISP_ERR_PLUS("%s%s \n", STR_ERR_CREATE_OPEN_ERR, NewFileName);
+        DISP_ERR(STR_ERR_CREATE_OPEN_ERR);
         free(pData);
         fclose(NewFp);
         return STAT_ERR;
@@ -341,7 +346,7 @@ static G_STATUS Decrypt_KB_File(FILE *fp, const char *pFileName, int64_t FileSiz
     FILE *NewFp = fopen(NewFileName, "wb+");
     if(NULL == NewFp)
     {
-        DISP_ERR_PLUS("%s%s \n", STR_ERR_CREATE_OPEN_ERR, NewFileName);
+        DISP_ERR(STR_ERR_CREATE_OPEN_ERR);
         free(pData);
         fclose(NewFp);
         return STAT_ERR;

@@ -10,6 +10,8 @@
 
 #include "common.h"
 
+#define CTL_MENU_FUNC_NUM                   5
+
 #ifdef __LINUX
 #include <ncurses.h>
 #define CTL_ExitConsole()                   endwin()
@@ -22,8 +24,10 @@
 
 void CTL_InitConsole(void);
 G_STATUS CTL_ChooseLanguage(void);
-
-G_STATUS CTL_ShowMenu(void);
+void CTL_DrawStdScreen(void);
+G_STATUS CTL_ChooseFunc(char *pFunc);
+G_STATUS CTL_ShowInstruction(void);
+G_STATUS CTL_GetFileName(char *pFileName);
 
 
 #endif

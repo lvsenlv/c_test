@@ -10,8 +10,8 @@
 
 #include "common.h"
 
-#define FILE_NAME_LENGTH                    128
-#define PASSWORD_LENGHT                     18
+#define CYT_FILE_NAME_LENGTH                128
+#define CYT_PASSWORD_LENGHT                 18
 #define ENCRYPT_FILE_SUFFIX_NAME            ".encrypt"
 #define DECRYPT_FILE_SUFFIX_NAME            ".decrypt"
 
@@ -49,6 +49,8 @@
 #define STR_ERR_INPUT_NULL                  "Error: Input could not be null"
 #define STR_ERR_GET_FILE_SIZE_ERR           "Error: Fail to get file size"
 #endif //__CHINESE
+
+extern char g_password[CYT_PASSWORD_LENGHT];
 
 #endif
 

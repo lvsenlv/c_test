@@ -54,6 +54,8 @@ typedef     unsigned int                    uint32_t;
 typedef enum {
     STAT_OK = 0,
     STAT_ERR,
+    STAT_GO_BACK,
+    STAT_EXIT,          //exit project
 }G_STATUS;
 
 #ifdef __OS
