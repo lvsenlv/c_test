@@ -55,6 +55,7 @@ typedef enum {
     STAT_OK = 0,
     STAT_ERR,
     STAT_GO_BACK,
+    STAT_RETRY,
     STAT_EXIT,          //exit project
 }G_STATUS;
 

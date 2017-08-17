@@ -11,6 +11,7 @@
 
 int main(void)
 {
+    DISP("test \n");
     G_STATUS status;
     CTL_InitConsole();
     status = CTL_ChooseLanguage();
@@ -27,8 +28,7 @@ int main(void)
     
     CTL_DrawStdScreen();
 
-    char func = 0;
-    char FileName[CYT_FILE_NAME_LENGTH];
+    char func = 0;    
     while(1)
     {
         status = CTL_ChooseFunc(&func);
@@ -43,7 +43,7 @@ int main(void)
             exit(-1);
         }
 
-        if(func == 5)
+        if(CTL_MENU_FUNC_INSTRUCTION == func)
         {
             status = CTL_ShowInstruction();
             if(STAT_EXIT == status)
@@ -51,24 +51,46 @@ int main(void)
                 CTL_ExitConsole();
                 exit(0);
             }
+            else if(STAT_ERR == status)
+            {
+                CTL_ExitConsole();
+                exit(-1);
+            }
             continue;
         }
-        
-        status = CTL_GetFileName(FileName);
-        
-        if(STAT_EXIT == status)
+        else if((func >= CTL_MENU_FUNC_ENCRYPT_FILE) && (func <= CTL_MENU_FUNC_DECRYPT_FOLDER))
         {
-            CTL_ExitConsole();
-            exit(0);
+            status = encrypt(func);
+            if(STAT_EXIT == status)
+            {
+                CTL_ExitConsole();
+                exit(0);
+            }
+            else if(STAT_ERR == status)
+            {
+                CTL_ExitConsole();
+                exit(-1);
+            }
+            else if(STAT_GO_BACK == status)
+                continue;
         }
-        else if(STAT_ERR == status)
+        else if(CTL_MENU_FUNC_CHOOSE_LANGUAGE == func)
         {
-            CTL_ExitConsole();
-            exit(-1);
-        }
-        else if(STAT_GO_BACK == status)
+            status = CTL_ChooseLanguage();
+            if(STAT_EXIT == status)
+            {
+                CTL_ExitConsole();
+                exit(0);
+            }
+            else if(STAT_ERR == status)
+            {
+                CTL_ExitConsole();
+                exit(-1);
+            }
+            CTL_DrawStdScreen();
             continue;
-            
+        }        
+        
     }
 
     while(1);

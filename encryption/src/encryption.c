@@ -10,10 +10,11 @@
 #endif
 
 #include "encryption.h"
+#include "control.h"
 #include <string.h>
-#include <sys/stat.h>
 
-static G_STATUS GetFileSize(const char *pFileName, int64_t *pFileSize);
+static G_STATUS EncryptFile(void);
+static inline G_STATUS GetFileSize(const char *pFileName, int64_t *pFileSize);
 static G_STATUS Encrypt_KB_File(FILE *fp, const char *pFileName, int64_t FileSize);
 static G_STATUS Encrypt_MB_File(FILE *fp, const char *pFileName, int64_t FileSize);
 static G_STATUS Encrypt_GB_File(FILE *fp, const char *pFileName, int64_t FileSize);
@@ -21,19 +22,53 @@ static G_STATUS Decrypt_KB_File(FILE *fp, const char *pFileName, int64_t FileSiz
 
 char g_password[CYT_PASSWORD_LENGHT];
 
-G_STATUS encrypt(char *pFunc)
+G_STATUS encrypt(char func)
 {
+    G_STATUS status;
+
+    switch(func)
+    {
+        case CTL_MENU_FUNC_ENCRYPT_FILE :                         
+            status = EncryptFile();
+            if(status != STAT_OK)
+                return status;
+            break;
+        case CTL_MENU_FUNC_ENCRYPT_FOLDER :
+            break;
+        case CTL_MENU_FUNC_DECRYPT_FILE :
+            break;
+        case CTL_MENU_FUNC_DECRYPT_FOLDER :
+            break;
+        default :
+            break;
+    }
     
+    return STAT_OK;
 }
 
+static G_STATUS EncryptFile(void)
+{
+    G_STATUS status;
+    char FileName[CYT_FILE_NAME_LENGTH];
+    status = CTL_GetFileName(FileName);
+    if(status != STAT_OK)
+        return status; 
 
-#ifdef __LINUX
-static G_STATUS GetFileSize(const char *pFileName, int64_t *pFileSize)
+    status = CTL_GetPassord(g_password);
+    if(status != STAT_OK)
+        return status;
+    
+    return STAT_OK;
+}
+
+#ifdef __LINUX    
+static inline G_STATUS GetFileSize(const char *pFileName, int64_t *pFileSize)
 {
     struct stat FileInfo;
     int res = 0;
 
     res = stat(pFileName, &FileInfo);
+   
     if(res != 0)
     {
         DISP_ERR(STR_ERR_GET_FILE_SIZE_ERR);
@@ -45,9 +80,22 @@ static G_STATUS GetFileSize(const char *pFileName, int64_t *pFileSize)
     return STAT_OK;
 }
 #elif defined __WINDOWS
-static G_STATUS GetFileSize(const char *pFileName, int64_t *pFileSize)
-{    
-    return STAT_ERR;
+static inline G_STATUS GetFileSize(const char *pFileName, int64_t *pFileSize)
+{
+    struct _stati64 FileInfo;
+    int res = 0;
+
+    res = _stati64(pFileName, &FileInfo);
+   
+    if(res != 0)
+    {
+        DISP_ERR(STR_ERR_GET_FILE_SIZE_ERR);
+        return STAT_ERR;
+    }
+    
+    *pFileSize = FileInfo.st_size;
+    
+    return STAT_OK;
 }
 #endif
 
@@ -176,7 +224,7 @@ static G_STATUS Encrypt_KB_File(FILE *fp, const char *pFileName, int64_t FileSiz
     }
 
     //write encyption data to new file
-    char NewFileName[FILE_NAME_LENGTH];
+    char NewFileName[CYT_FILE_NAME_LENGTH];
     snprintf(NewFileName, sizeof(NewFileName), "%s%s", pFileName, ENCRYPT_FILE_SUFFIX_NAME);
     FILE *NewFp = fopen(NewFileName, "wb+");
     if(NULL == NewFp)
@@ -341,7 +389,7 @@ static G_STATUS Decrypt_KB_File(FILE *fp, const char *pFileName, int64_t FileSiz
     }
 
     //write encyption data to new file
-    char NewFileName[FILE_NAME_LENGTH];
+    char NewFileName[CYT_FILE_NAME_LENGTH];
     snprintf(NewFileName, sizeof(NewFileName), "%s%s", pFileName, DECRYPT_FILE_SUFFIX_NAME);
     FILE *NewFp = fopen(NewFileName, "wb+");
     if(NULL == NewFp)
