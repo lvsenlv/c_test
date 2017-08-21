@@ -37,15 +37,7 @@ enum
 };
 #endif
 
-static inline void CTL_ClearWindow(WINDOW *win, int lines, int cols, 
-    int LineStart, int ColStart)
-{
-    int i, j = LineStart+lines;
-    for(i = LineStart; i < j; i++)
-    {
-        mvwhline(win, i, ColStart, ' ', cols);
-    }
-}
+extern char **g_pStr;
 
 void CTL_InitConsole(void);
 G_STATUS CTL_ChooseLanguage(void);

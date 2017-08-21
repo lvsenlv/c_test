@@ -59,7 +59,8 @@ typedef enum {
     STAT_EXIT,          //exit project
 }G_STATUS;
 
-#ifdef __OS
+#if 0
+#if (defined __LINUX) || (defined __WINDOWS)
     #ifdef __REDIRECTION
         extern FILE *g_pDispFile;
         #define     DISP(format, args...) \
@@ -86,11 +87,12 @@ typedef enum {
         #define     DISP_ERR_PLUS(format, args...) \
                     fprintf(stderr, format, ##args)
     #endif //__REDIRECTION
-#else //__OS
+#else //(defined __LINUX) || (defined __WINDOWS)
     #define     DISP(format, args...)           ((void)0)
     #define     DISP_ERR(str)                   ((void)0)
     #define     DISP_ERR_PLUS(format, args...)  ((void)0)
-#endif //__OS
+#endif //(defined __LINUX) || (defined __WINDOWS)
+#endif //#if 0
 
 #ifdef __LINUX
     #include <sys/time.h>

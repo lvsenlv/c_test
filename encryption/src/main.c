@@ -11,7 +11,6 @@
 
 int main(void)
 {
-    DISP("test \n");
     G_STATUS status;
     CTL_InitConsole();
     status = CTL_ChooseLanguage();

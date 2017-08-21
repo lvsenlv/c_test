@@ -268,7 +268,7 @@ G_STATUS CTL_GetFileName(char *pFileName)
             return STAT_GO_BACK;
         }
 
-        CTL_ClearWindow(win, lines-2, cols, 1, 0);
+        wclear(win);
     }
 
     delwin(win);
@@ -310,11 +310,19 @@ G_STATUS CTL_GetPassord(char *pPassword)
         while(1)
         {
             key = wgetch(win);
-            if((key >= KEY_CODE_YES) && (key < KEY_BACKSPACE))
-                continue;
-            else if(key > KEY_BACKSPACE)
-                continue;
+            if((key >= 32) && (key <= 126))
+            {
+                if(i >= (CYT_PASSWORD_LENGHT-1))
+                    continue;
+                waddch(win, '*');
+                CurPosX++;
+                pPassword[i++] = (char)key;
+            }
+            #ifdef __LINUX
             else if(KEY_BACKSPACE == key)
+            #elif defined __WINDOWS
+            else if(8 == key)  //Backspace key
+            #endif
             {
                 if(i > 0)
                 {
@@ -329,19 +337,14 @@ G_STATUS CTL_GetPassord(char *pPassword)
                 delwin(win);
                 return STAT_EXIT;
             }
-            else
-            {
-                if(i >= (CYT_PASSWORD_LENGHT-1))
-                    continue;
-                waddch(win, '*');
-                CurPosX++;
-                pPassword[i++] = (char)key;
-            }
+            else 
+                continue;
+            
             wmove(win, 2, CurPosX);
         }
         pPassword[i] = '\0';
 
-        if((i-1) < CYT_PASSWORD_LENGHT_LIMIT)
+        if(i < CYT_PASSWORD_LENGHT_LIMIT)
         {
             status = CTL_MakeChoice(win, lines, cols, g_pStr[CTL_STR_PASSWORD_TOO_SHORT]);
             if(STAT_ERR == status)
@@ -358,7 +361,7 @@ G_STATUS CTL_GetPassord(char *pPassword)
                 refresh();
                 return STAT_GO_BACK;
             }
-            CTL_ClearWindow(win, lines-2, cols, 1, 0);
+            wclear(win);
             continue;
         }
 
@@ -368,11 +371,19 @@ G_STATUS CTL_GetPassord(char *pPassword)
         while(1)
         {
             key = wgetch(win);
-            if((key >= KEY_CODE_YES) && (key < KEY_BACKSPACE))
-                continue;
-            else if(key > KEY_BACKSPACE)
-                continue;
+            if((key >= 32) && (key <= 126))
+            {
+                if(i >= (CYT_PASSWORD_LENGHT-1))
+                    continue;
+                waddch(win, '*');
+                CurPosX++;
+                buf[i++] = (char)key;
+            }
+            #ifdef __LINUX
             else if(KEY_BACKSPACE == key)
+            #elif defined __WINDOWS
+            else if(8 == key)  //Backspace key
+            #endif
             {
                 if(i > 0)
                 {
@@ -387,14 +398,9 @@ G_STATUS CTL_GetPassord(char *pPassword)
                 delwin(win);
                 return STAT_EXIT;
             }
-            else
-            {
-                if(i >= (CYT_PASSWORD_LENGHT-1))
-                    continue;
-                waddch(win, '*');
-                CurPosX++;
-                buf[i++] = (char)key;
-            }
+            else 
+                continue;
+            
             wmove(win, 3, CurPosX);
         }
         buf[i] = '\0';
@@ -417,7 +423,8 @@ G_STATUS CTL_GetPassord(char *pPassword)
             refresh();
             return STAT_GO_BACK;
         }
-        CTL_ClearWindow(win, lines-2, cols, 1, 0);
+        
+        wclear(win);
     }
 
     delwin(win);
